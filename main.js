@@ -11,13 +11,14 @@ class Butterfly {
 		this.x = 0
 		this.y = 0
 		this.a = 0
-		this.flapping = false
 
 		this.svg = d3.select('#content')
 			.append('svg')
 			.attr('transform-origin', 'center')
 			.attr('width', '5%')
 			.attr('viewBox', '0 0 550 480')
+
+		this.svg.on('mouseup', () => {this.flap()})
 
 		//Left wing
 		this.leftWing = this.svg.append('g').attr('transform-origin', 'center')
@@ -44,7 +45,6 @@ class Butterfly {
 	}
 
 	flap(duration = 50, times = 1, minimum_wing_close = 0.1) {
-		console.log(times)
 		this.leftWing
 			.transition()
 			.duration(duration)
@@ -75,6 +75,7 @@ class Butterfly {
 	}
 
 	moveTo(x, y, turn_duration = 1500, flight_duration = 3000, final_flap=true) {
+
 		let dist = Math.sqrt(x*x+y*y)
 
 		//Distance: x^2 + y^2 (Pythagoras in the <3)
@@ -92,7 +93,7 @@ class Butterfly {
 			.duration(flight_duration)
 			.attr('transform', 'translate('+x+' '+y+') rotate('+a+')').
 			on('end', () => {
-				this.flap(300, 2, 0.7)
+				this.flap(200+Math.floor(Math.random()*300), 1+Math.floor(Math.random()*4), Math.random())
 			})
 	}
 
