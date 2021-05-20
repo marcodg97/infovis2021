@@ -87,7 +87,7 @@ class Butterfly {
 		this.svg
 			.transition()
 			.duration(turn_duration)
-			.attr('transform', 'rotate ('+a/2+')')
+			.attr('transform', 'translate('+this.x+' '+this.y+') rotate ('+a/2+')')
 
 		this.svg
 			.transition()
@@ -95,6 +95,8 @@ class Butterfly {
 			.duration(flight_duration)
 			.attr('transform', 'translate('+x+' '+y+') rotate('+a+')').
 			on('end', () => {
+				this.x = x
+				this.y = y
 				this.flap(200+Math.floor(Math.random()*300), 1+Math.floor(Math.random()*4), Math.random())
 			})
 	}
