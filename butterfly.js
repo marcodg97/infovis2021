@@ -10,7 +10,6 @@ class Butterfly {
 	constructor(dimension = 5) {
 		this.x = 0
 		this.y = 0
-		this.a = 0
 
 		//create a butterfly SVG with the specified dimensions
 		this.svg = d3.select('#content')
@@ -20,8 +19,7 @@ class Butterfly {
 			.attr('viewBox', '0 0 550 480')
 
 		//Make a flap if clicked
-		//this.svg.on('mouseup', () => {this.flap()})
-		this.svg.on('mouseup', () => {this.moveTo(Math.random()*1000,Math.random()*500)})
+		this.svg.on('mouseup', () => {this.flap()})
 
 		//Left wing
 		this.leftWing = this.svg.append('g').attr('transform-origin', 'center')
@@ -78,36 +76,42 @@ class Butterfly {
 	}
 
 	moveTo(x, y, duration = 4000, final_flap=true) {
+		console.log('Move butterfly to ('+x+' '+y+')')
 
 		let turn_duration = Math.floor(Math.random()*duration)
 		let flight_duration = duration-turn_duration
 
+		//Flap the wings as many times as necessary for the flight
 		this.flap(50, (turn_duration+flight_duration)/100)
 
+		//Distance: x^2 + y^2 (Pythagoras in the <3)...
 		let dist = Math.sqrt(x*x+y*y)
 
-		//Distance: x^2 + y^2 (Pythagoras in the <3)
-		//sin angle: sin^-1(Opposite/Distance) + 90°
-		this.a = ((180*Math.asin(y/dist))/Math.PI)
-		if(this.x < x && this.y < y) this.a += 90
-		else if(this.x < x) this.a += 45
-		else if(this.y < y) this.a -= 145
-		else this.a -= 90
+		//...and then calc the rotation angle
+		let angle = ((180*Math.asin(y/dist))/Math.PI)
+		if(this.x < x && this.y < y) angle += 90
+		else if(this.x < x) angle += 45
+		else if(this.y < y) angle -= 145
+		else angle -= 90
 
+		//First animation step: Rotate the butterfly
 		this.svg
 			.transition()
 			.duration(turn_duration)
 			.ease(d3.easeQuadOut)
-			.attr('transform', 'translate('+this.x+' '+this.y+') rotate ('+this.a+')')
+			.attr('transform', 'translate('+this.x+' '+this.y+') rotate ('+angle+')')
 
+		//Second animation step: move forward the butterfly
 		this.svg
 			.transition()
 			.delay(turn_duration)
 			.duration(flight_duration)
-			.attr('transform', 'translate('+x+' '+y+') rotate('+this.a+')').
+			.attr('transform', 'translate('+x+' '+y+') rotate('+angle+')').
 			on('end', () => {
 				this.x = x
 				this.y = y
+
+				//Make one or more randomic slow flaps at the end of the flight
 				this.flap(200+Math.floor(Math.random()*300), 1+Math.floor(Math.random()*4), Math.random())
 			})
 	}
