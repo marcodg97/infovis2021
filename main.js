@@ -20,7 +20,8 @@ class Butterfly {
 			.attr('viewBox', '0 0 550 480')
 
 		//Make a flap if clicked
-		this.svg.on('mouseup', () => {this.flap()})
+		//this.svg.on('mouseup', () => {this.flap()})
+		this.svg.on('mouseup', () => {this.moveTo(Math.random()*1000,Math.random()*500)})
 
 		//Left wing
 		this.leftWing = this.svg.append('g').attr('transform-origin', 'center')
@@ -82,7 +83,11 @@ class Butterfly {
 
 		//Distance: x^2 + y^2 (Pythagoras in the <3)
 		//sin angle: sin^-1(Opposite/Distance) + 90°
-		this.a = ((180*Math.asin(y/dist))/Math.PI)+90
+		this.a = ((180*Math.asin(y/dist))/Math.PI)
+		if(this.x < x && this.y < y) this.a += 90
+		else if(this.x < x) this.a += 45
+		else if(this.y < y) this.a -= 145
+		else this.a -= 90
 
 		this.svg
 			.transition()
