@@ -1,29 +1,34 @@
 <html>
+
 	<head>
 		<title>InfoVis 2021</title>
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/d3/6.7.0/d3.min.js'></script>
 		<style></style>
 	</head>
+
 	<style>
 		body {
 			margin: 0px;
 		}
 
 		p {
+			color: gray;
+			font-style: italic;
 			position: fixed;
 			text-align: center;
 			width: 100%;
 			bottom: 5px;
 		}
 	</style>
-	<body>
-		<p>Butterflies SVG made by <a href='https://www.flaticon.com/authors/good-ware' title='Freepik'>Freepik</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></p>
+
+	<body scroll='no' style='overflow: hidden;'>
+		<p>The SVG of butterflies are made by <a href='https://www.flaticon.com/authors/good-ware' title='Freepik'>Freepik</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></p>
 		<div id='content'></div>
 	</body>
+
 	<script src='butterfly.js'></script>
 	<script>
 
-		let pressed_keys = []
 		var width = (document.body.clientWidth)
 		var height = (document.body.clientHeight)
 
