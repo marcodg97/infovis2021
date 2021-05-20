@@ -14,6 +14,8 @@ class Butterfly {
 		this.x_offset = id*document.body.clientWidth*(dimension/100)+(document.body.clientWidth*(dimension/200))
 		this.y_offset = document.body.clientWidth*(dimension/200)
 
+		this.flapping = false
+
 		//create a butterfly SVG with the specified dimensions
 		this.svg = d3.select('#content')
 			.append('svg')
@@ -45,9 +47,12 @@ class Butterfly {
 		let body = this.svg.append('g')
 		body.append('path').style('fill', '#908490').attr('d', 'M256,229.517c-1.836,0-3.482-1.142-4.129-2.862l-26.483-70.621c-0.862-2.284,0.294-4.828,2.578-5.685 c2.276-0.836,4.828,0.298,5.681,2.582L256,212.534l22.354-59.604c0.853-2.289,3.423-3.423,5.681-2.582 c2.284,0.857,3.439,3.401,2.578,5.685l-26.483,70.621C259.482,228.375,257.836,229.517,256,229.517z');
 		body.append('path').style('fill', '#463246').attr('d', 'M256,278.069L256,278.069c-9.751,0-17.655-7.904-17.655-17.655v-26.483 c0-9.751,7.904-17.655,17.655-17.655l0,0c9.751,0,17.655,7.904,17.655,17.655v26.483C273.655,270.165,265.751,278.069,256,278.069z');
+
 	}
 
 	flap(duration = 50, times = 1, minimum_wing_close = 0.1) {
+		this.flapping = true
+
 		this.leftWing
 			.transition()
 			.duration(duration)
@@ -74,18 +79,30 @@ class Butterfly {
 			.on('end', () => {
 				if(times > 0)
 					this.flap(duration, times-1, minimum_wing_close)
+				else
+					this.flapping = false
 			})
+	}
+
+	flapSometimes(min, max) {
+		setTimeout(() => {
+			
+			if(this.flapping == false)
+				this.flap();
+			this.flapSometimes(min, max);
+
+		}, min+Math.floor(Math.random()*max));
 	}
 
 	moveTo(x, y, duration = 4000, final_flap=true) {
 		x -= this.x_offset
 		y -= this.y_offset
 
-		let turn_duration = Math.floor(Math.random()*duration)
-		let flight_duration = duration-turn_duration
+		let delay_duration = Math.floor(Math.random()*500)
+		let turn_duration = Math.floor(Math.random()*duration/2)-delay_duration
+		if(turn_duration < 0) turn_duration = 0
 
-		//Flap the wings as many times as necessary for the flight
-		this.flap(50, (turn_duration+flight_duration)/100)
+		let flight_duration = duration-turn_duration
 
 		//Distance: x^2 + y^2 (Pythagoras in the <3)...
 		let dist = Math.sqrt(x*x+y*y);
@@ -100,26 +117,32 @@ class Butterfly {
 			else angle -= 90
 		}
 
-		//First animation step: Rotate the butterfly
-		this.svg
-			.transition()
-			.duration(turn_duration)
-			.ease(d3.easeQuadOut)
-			.attr('transform', 'translate('+this.x+' '+this.y+') rotate ('+angle+')')
+		setTimeout(() => {
+			//Flap the wings as many times as necessary for the flight
+			this.flap(50, (turn_duration+flight_duration)/100)
 
-		//Second animation step: move forward the butterfly
-		this.svg
-			.transition()
-			.delay(turn_duration)
-			.duration(flight_duration)
-			.attr('transform', 'translate('+x+' '+y+') rotate('+angle+')').
-			on('end', () => {
-				this.x = x
-				this.y = y
+			//First animation step: Rotate the butterfly
+			this.svg
+				.transition()
+				.delay(delay_duration)
+				.duration(turn_duration)
+				.ease(d3.easeQuadOut)
+				.attr('transform', 'translate('+this.x+' '+this.y+') rotate ('+angle+')')
 
-				//Make one or more randomic slow flaps at the end of the flight
-				this.flap(200+Math.floor(Math.random()*300), 1+Math.floor(Math.random()*4), Math.random())
-			})
+			//Second animation step: move forward the butterfly
+			this.svg
+				.transition()
+				.delay(turn_duration)
+				.duration(flight_duration)
+				.attr('transform', 'translate('+x+' '+y+') rotate('+angle+')').
+				on('end', () => {
+					this.x = x
+					this.y = y
+
+					//Make one or more randomic slow flaps at the end of the flight
+					this.flap(200+Math.floor(Math.random()*300), 1+Math.floor(Math.random()*4), Math.random())
+				})
+		}, delay_duration)
 	}
 
 }

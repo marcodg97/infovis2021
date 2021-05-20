@@ -29,21 +29,22 @@
 
 		butterflies = [];
 
-		console.log(width)
-
 		for(let i=0; i<10; i++) {
 			//Instantiate the butterfly
 			butterflies[i] = new Butterfly(i);
 
 			//Make it fly to a starting random position
-			//butterflies[i].moveTo(Math.floor(Math.random()*width), Math.floor(Math.random()*height), 5000+Math.floor(Math.random()*3000));
+			butterflies[i].moveTo(Math.random()*width, Math.random()*height, 5000+Math.floor(Math.random()*3000));
+
+			//Butterfly can make a single flap sometimes
+			butterflies[i].flapSometimes(2000, 10000);
 		}
 
 		function drawCharacter(character) {
 			d3.json('characters/'+character+'.json').then(function(data) {
 
 				for(let i=0; i<data.length; i++) {
-					butterflies[i].moveTo(data[i].x*width, data[i].y*height)
+					butterflies[i].moveTo(data[i].x*width, data[i].y*height, 5000+Math.floor(Math.random()*3000))
 				}
 
 			}).catch(function(error) {
