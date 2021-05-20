@@ -86,9 +86,9 @@ class Butterfly {
 
 	flapSometimes(min, max) {
 		setTimeout(() => {
-			
+
 			if(this.flapping == false)
-				this.flap();
+				this.flap(50+Math.floor(Math.random()*400), 1, Math.random());
 			this.flapSometimes(min, max);
 
 		}, min+Math.floor(Math.random()*max));
