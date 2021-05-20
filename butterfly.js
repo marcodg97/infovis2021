@@ -7,14 +7,15 @@ Marco De Giovanni - 499633
 
 class Butterfly {
 
-	constructor(dimension = 5) {
+	constructor(id, dimension = 5) {
 		this.x = 0
 		this.y = 0
+
+		this.x_offset = id*document.body.clientWidth*(dimension/100)
 
 		//create a butterfly SVG with the specified dimensions
 		this.svg = d3.select('#content')
 			.append('svg')
-			.attr('transform-origin', 'center')
 			.attr('width', dimension+'%')
 			.attr('viewBox', '0 0 550 480')
 
@@ -76,7 +77,7 @@ class Butterfly {
 	}
 
 	moveTo(x, y, duration = 4000, final_flap=true) {
-		console.log('Move butterfly to ('+x+' '+y+')')
+		x -= this.x_offset
 
 		let turn_duration = Math.floor(Math.random()*duration)
 		let flight_duration = duration-turn_duration
@@ -85,14 +86,17 @@ class Butterfly {
 		this.flap(50, (turn_duration+flight_duration)/100)
 
 		//Distance: x^2 + y^2 (Pythagoras in the <3)...
-		let dist = Math.sqrt(x*x+y*y)
+		let dist = Math.sqrt(x*x+y*y);
+		let angle = 0;
 
-		//...and then calc the rotation angle
-		let angle = ((180*Math.asin(y/dist))/Math.PI)
-		if(this.x < x && this.y < y) angle += 90
-		else if(this.x < x) angle += 45
-		else if(this.y < y) angle -= 145
-		else angle -= 90
+		if(dist > 0) {
+			//...and then calc the rotation angle
+			angle = ((180*Math.asin(y/dist))/Math.PI)
+			if(this.x < x && this.y < y) angle += 90
+			else if(this.x < x) angle += 45
+			else if(this.y < y) angle -= 145
+			else angle -= 90
+		}
 
 		//First animation step: Rotate the butterfly
 		this.svg

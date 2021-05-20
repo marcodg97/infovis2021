@@ -5,6 +5,10 @@
 		<style></style>
 	</head>
 	<style>
+		body {
+			margin: 0px;
+		}
+
 		p {
 			position: fixed;
 			text-align: center;
@@ -20,19 +24,19 @@
 	<script>
 
 		let pressed_keys = []
-		var width = (document.body.clientWidth*window.devicePixelRatio)/2
-		var height = (document.body.clientHeight*window.devicePixelRatio)/2
+		var width = (document.body.clientWidth)
+		var height = (document.body.clientHeight)
 
 		butterflies = [];
 
-		console.log(height)
+		console.log(width)
 
 		for(let i=0; i<10; i++) {
 			//Instantiate the butterfly
-			butterflies[i] = new Butterfly();
+			butterflies[i] = new Butterfly(i);
 
 			//Make it fly to a starting random position
-			butterflies[i].moveTo(Math.floor(Math.random()*width), Math.floor(Math.random()*height), 5000+Math.floor(Math.random()*3000));
+			//butterflies[i].moveTo(Math.floor(Math.random()*width), Math.floor(Math.random()*height), 5000+Math.floor(Math.random()*3000));
 		}
 
 		function drawCharacter(character) {
