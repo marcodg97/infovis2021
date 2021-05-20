@@ -77,7 +77,12 @@ class Butterfly {
 			})
 	}
 
-	moveTo(x, y, turn_duration = 1500, flight_duration = 3000, final_flap=true) {
+	moveTo(x, y, duration = 4000, final_flap=true) {
+
+		let turn_duration = Math.floor(Math.random()*duration)
+		let flight_duration = duration-turn_duration
+
+		this.flap(50, (turn_duration+flight_duration)/100)
 
 		let dist = Math.sqrt(x*x+y*y)
 
