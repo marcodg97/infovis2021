@@ -11,35 +11,46 @@
 			width: 100%;
 			bottom: 5px;
 		}
-
 	</style>
-	<!--<body scroll='no' style='overflow: hidden'>-->
 	<body>
 		<p>Butterflies SVG made by <a href='https://www.flaticon.com/authors/good-ware' title='Freepik'>Freepik</a> from <a href='https://www.flaticon.com/' title='Flaticon'>www.flaticon.com</a></p>
-		<div id='content'>
-			
-		</div>
+		<div id='content'></div>
 	</body>
 	<script src='butterfly.js'></script>
 	<script>
 
+		let pressed_keys = []
 		var width = (document.body.clientWidth*window.devicePixelRatio)/2
 		var height = (document.body.clientHeight*window.devicePixelRatio)/2
 
 		butterflies = [];
 
-		for(var i=0; i<11; i++) {
+		console.log(height)
+
+		for(let i=0; i<10; i++) {
+			//Instantiate the butterfly
 			butterflies[i] = new Butterfly();
-			butterflies[i].moveTo(Math.floor(Math.random()*width), Math.floor(Math.random()*height), 5000+Math.floor(Math.random()*3000))
+
+			//Make it fly to a starting random position
+			butterflies[i].moveTo(Math.floor(Math.random()*width), Math.floor(Math.random()*height), 5000+Math.floor(Math.random()*3000));
 		}
 
 		function drawCharacter(character) {
 			d3.json('characters/'+character+'.json').then(function(data) {
-				console.log(data)
-			});
+
+				for(let i=0; i<data.length; i++) {
+					butterflies[i].moveTo(data[i].x*width, data[i].y*height)
+				}
+
+			}).catch(function(error) {
+				console.log(error)
+			})
 		}
 
-		drawCharacter('a')
+		d3.select('body')
+			.on('keyup', function(event) {
+				drawCharacter(event.key);
+			});
 
 	</script>
 </html>
