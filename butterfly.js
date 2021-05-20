@@ -22,7 +22,7 @@ class Butterfly {
 			.attr('width', dimension+'%')
 			.attr('viewBox', '0 0 550 480')
 
-		//Make a flap if clicked
+		//Make a fast flap if clicked
 		this.svg.on('mouseup', () => {this.flap()})
 
 		//Left wing
@@ -50,6 +50,7 @@ class Butterfly {
 
 	}
 
+	//Make the butterfly flapping
 	flap(duration = 50, times = 1, minimum_wing_close = 0.1) {
 		this.flapping = true
 
@@ -84,6 +85,7 @@ class Butterfly {
 			})
 	}
 
+	//if called, the butterfly begins to make randomly single flaps
 	flapSometimes(min, max) {
 		setTimeout(() => {
 
@@ -94,7 +96,8 @@ class Butterfly {
 		}, min+Math.floor(Math.random()*max));
 	}
 
-	moveTo(x, y, duration = 4000, final_flap=true) {
+	//Move the butterfly into the position at coordinate X;Y 
+	moveTo(x, y, duration = 4000) {
 		x -= this.x_offset
 		y -= this.y_offset
 
