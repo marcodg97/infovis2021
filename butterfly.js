@@ -11,7 +11,8 @@ class Butterfly {
 		this.x = 0
 		this.y = 0
 
-		this.x_offset = id*document.body.clientWidth*(dimension/100)
+		this.x_offset = id*document.body.clientWidth*(dimension/100)+(document.body.clientWidth*(dimension/200))
+		this.y_offset = document.body.clientWidth*(dimension/200)
 
 		//create a butterfly SVG with the specified dimensions
 		this.svg = d3.select('#content')
@@ -78,6 +79,7 @@ class Butterfly {
 
 	moveTo(x, y, duration = 4000, final_flap=true) {
 		x -= this.x_offset
+		y -= this.y_offset
 
 		let turn_duration = Math.floor(Math.random()*duration)
 		let flight_duration = duration-turn_duration
