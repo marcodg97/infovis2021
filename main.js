@@ -82,18 +82,19 @@ class Butterfly {
 
 		//Distance: x^2 + y^2 (Pythagoras in the <3)
 		//sin angle: sin^-1(Opposite/Distance) + 90°
-		let a = ((180*Math.asin(y/dist))/Math.PI)+90
+		this.a = ((180*Math.asin(y/dist))/Math.PI)+90
 
 		this.svg
 			.transition()
 			.duration(turn_duration)
-			.attr('transform', 'translate('+this.x+' '+this.y+') rotate ('+a/2+')')
+			.ease(d3.easeQuadOut)
+			.attr('transform', 'translate('+this.x+' '+this.y+') rotate ('+this.a+')')
 
 		this.svg
 			.transition()
 			.delay(turn_duration)
 			.duration(flight_duration)
-			.attr('transform', 'translate('+x+' '+y+') rotate('+a+')').
+			.attr('transform', 'translate('+x+' '+y+') rotate('+this.a+')').
 			on('end', () => {
 				this.x = x
 				this.y = y
