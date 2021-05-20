@@ -7,17 +7,19 @@ Marco De Giovanni - 499633
 
 class Butterfly {
 
-	constructor() {
+	constructor(dimension = 5) {
 		this.x = 0
 		this.y = 0
 		this.a = 0
 
+		//create a butterfly SVG with the specified dimensions
 		this.svg = d3.select('#content')
 			.append('svg')
 			.attr('transform-origin', 'center')
-			.attr('width', '5%')
+			.attr('width', dimension+'%')
 			.attr('viewBox', '0 0 550 480')
 
+		//Make a flap if clicked
 		this.svg.on('mouseup', () => {this.flap()})
 
 		//Left wing
